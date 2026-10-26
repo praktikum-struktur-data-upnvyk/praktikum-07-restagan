@@ -37,114 +37,68 @@
 using namespace std;
 
 // =============================================================================
-// SOAL 1a — preorder                                                   20 poin
-// =============================================================================
-// Contoh:
-//
-//               50
-//              ╱  ╲
-//            80    20            preorder(root) mencetak:
-//           ╱  ╲     ╲
-//         10    70    90             50 80 10 70 30 20 90
-//              ╱
-//            30
-//
-//   Coba runut pelan-pelan supaya urutannya masuk akal:
-//     50 dicetak dulu (dia root), lalu giliran cabang kirinya;
-//     80 dicetak, lalu giliran cabang kirinya;
-//     10 dicetak, tidak punya cabang, selesai;
-//     70 dicetak, lalu 30 (cabang kirinya), cabang kanannya tidak ada;
-//     cabang kiri 50 sudah habis, sekarang cabang kanannya;
-//     20 dicetak, cabang kirinya tidak ada, lalu 90.
-//
-//   Tree kosong tidak mencetak apa pun:
-//
-//     preorder(NULL);    // layar tidak bertambah apa-apa
-//
-//   Tree berisi satu node saja mencetak satu angka:
-//
-//     Node satu{42, NULL, NULL};
-//     preorder(&satu);      // mencetak:  42
+// SOAL 1a — preorder                                                  20 poin
 // =============================================================================
 void preorder(const Node* root) {
+    if (root == NULL) {
+        return;
+    }
+    cout << root->data << " ";
+    preorder(root->left);
+    preorder(root->right);
 }
 
 // =============================================================================
-// SOAL 1b — inorder                                                    20 poin
-// =============================================================================
-// Contoh:
-//
-//               50
-//              ╱  ╲
-//            80    20            inorder(root) mencetak:
-//           ╱  ╲     ╲
-//         10    70    90             10 80 30 70 50 20 90
-//              ╱
-//            30
-//
-//   Bandingkan dengan preorder yang mencetak  50 80 10 70 30 20 90.
-//   Angkanya sama, hanya urutannya yang berpindah. Yang paling kentara: 50
-//   tadinya di paling depan, sekarang berada di TENGAH — karena seluruh cabang
-//   kirinya harus selesai lebih dulu.
-//
-//     inorder(NULL);     // tidak mencetak apa pun
+// SOAL 1b — inorder                                                   20 poin
 // =============================================================================
 void inorder(const Node* root) {
+    if (root == NULL) {
+        return;
+    }
+    inorder(root->left);
+    cout << root->data << " ";
+    inorder(root->right);
 }
 
 // =============================================================================
-// SOAL 1c — postorder                                                  20 poin
-// =============================================================================
-// Contoh:
-//
-//               50
-//              ╱  ╲
-//            80    20            postorder(root) mencetak:
-//           ╱  ╲     ╲
-//         10    70    90             10 30 70 80 90 20 50
-//              ╱
-//            30
-//
-//   Ketiganya berdampingan supaya bedanya terlihat:
-//
-//     preorder  : 50 80 10 70 30 20 90     <- 50 di depan
-//     inorder   : 10 80 30 70 50 20 90     <- 50 di tengah
-//     postorder : 10 30 70 80 90 20 50     <- 50 di belakang
-//
-//     postorder(NULL);   // tidak mencetak apa pun
+// SOAL 1c — postorder                                                 20 poin
 // =============================================================================
 void postorder(const Node* root) {
+    if (root == NULL) {
+        return;
+    }
+    postorder(root->left);
+    postorder(root->right);
+    cout << root->data << " ";
 }
 
 // =============================================================================
-// SOAL 2b — clear                                                      25 poin
-// =============================================================================
-// Contoh:
-//
-//               50
-//              ╱  ╲
-//            80    20            clear(root);
-//           ╱  ╲     ╲
-//         10    70    90         sesudahnya:
-//              ╱                   root == NULL
-//            30                     ketujuh node sudah dibuang dari memori
-//
-//   Memanggilnya pada tree yang sudah kosong adalah sah:
-//
-//     Node* root = NULL;
-//     clear(root);              // aman, tidak terjadi apa-apa
-//
-//   Memanggilnya dua kali berturut-turut juga harus aman:
-//
-//     clear(root);              // tree menjadi kosong
-//     clear(root);              // aman, tidak terjadi apa-apa
+// SOAL 2b — clear                                                     25 poin
 // =============================================================================
 void clear(Node*& root) {
+    if (root == NULL) {
+        return;
+    }
+    clear(root->left);
+    clear(root->right);
+    
+    delete root;
+    root = NULL;
 }
 
 // =============================================================================
-// SOAL 3 — jumlahDaun                          SOAL CERITA             15 poin
+// SOAL 3 — jumlahDaun                  SOAL CERITA             15 poin
 // =============================================================================
+int jumlahDaun(const Node* root) {
+    if (root == NULL) {
+        return 0;
+    }
+
+    if (root->left == NULL && root->right == NULL) {
+        return 1;
+    }
+    return jumlahDaun(root->left) + jumlahDaun(root->right);
+}
 // Contoh:
 //
 //               50                jumlahDaun(root)  ->  3
@@ -176,9 +130,6 @@ void clear(Node*& root) {
 //      ╱                         (hanya node 3; node 5 dan 4 masing-masing
 //     3                           masih punya satu cabang)
 // =============================================================================
-int jumlahDaun(const Node* root) {
-    return 0;
-}
 
 // =============================================================================
 // MAIN() — program Anda sendiri. TIDAK dinilai, bebas diubah.
